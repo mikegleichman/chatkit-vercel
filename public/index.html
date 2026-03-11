@@ -147,8 +147,6 @@
       <span class="logo-text">knownwell</span>
     </div>
 
-    <p class="subtitle">Type <strong>"start"</strong> to get started</p>
-
     <div class="chat-card">
       <openai-chatkit id="chatkit" domain-key="domain_pk_69b1953264ec8194891802cae6ef741d0d8e65ed9eccf539"></openai-chatkit>
     </div>
@@ -159,7 +157,11 @@
       const el = document.getElementById('chatkit');
 
       el.setOptions({
-        api: {
+        el.setOptions({
+          startScreen: {
+            title: "Let's find out how you're doing. Type 'start' to get started."
+          },
+          api: {
           async getClientSecret(currentSecret) {
             try {
               const res = await fetch('/api/session', { method: 'POST' });
