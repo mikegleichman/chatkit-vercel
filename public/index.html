@@ -10,6 +10,7 @@
 
     html, body {
       height: 100%;
+      height: 100dvh;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: #f5f4e8;
       overflow: hidden;
@@ -61,6 +62,7 @@
       align-items: center;
       justify-content: center;
       height: 100vh;
+      height: 100dvh;
       padding: 20px;
     }
 
@@ -70,6 +72,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      flex-shrink: 0;
     }
     .logo-icon {
       width: 36px;
@@ -95,6 +98,7 @@
       color: #6b7280;
       margin-bottom: 20px;
       letter-spacing: 0.01em;
+      flex-shrink: 0;
     }
 
     /* Chat card */
@@ -108,22 +112,47 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      flex-shrink: 1;
+      min-height: 0;
     }
 
     openai-chatkit {
       flex: 1;
       width: 100%;
       height: 100%;
+      min-height: 0;
     }
 
-    @media (max-width: 840px) {
-      .page { padding: 0; justify-content: flex-start; }
-      .logo { margin-top: 24px; }
+    /* Mobile: full screen chat, tiny header */
+    @media (max-width: 640px) {
+      html, body {
+        height: 100dvh;
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+      }
+      .page {
+        padding: 12px 12px 0 12px;
+        justify-content: flex-start;
+        height: 100dvh;
+      }
+      .logo {
+        margin-bottom: 8px;
+        margin-top: 8px;
+      }
+      .logo-icon { width: 28px; height: 28px; }
+      .logo-text { font-size: 20px; }
+      .subtitle {
+        font-size: 13px;
+        margin-bottom: 10px;
+      }
       .chat-card {
-        height: calc(100vh - 110px);
-        border-radius: 16px;
-        margin: 0 12px;
-        width: calc(100% - 24px);
+        height: 0;
+        flex: 1;
+        border-radius: 16px 16px 0 0;
+        margin: 0;
+        width: 100%;
+        max-width: 100%;
       }
     }
   </style>
