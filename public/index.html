@@ -58,8 +58,9 @@
       try {
         const res = await fetch('/api/session', { method: 'POST' });
         if (!res.ok) {
-          const err = await res.json();
-          console.error('Session error:', err);
+          const err = await res.json().catch(() => ({}));
+          console.error('Session error:', res.status, err);
+          el.innerHTML = '<p style="padding:20px;color:red">Error starting session. Check the browser console and verify your environment variables in Vercel.</p>';
           return;
         }
         const { client_secret } = await res.json();
@@ -69,8 +70,12 @@
       }
     }
 
-    // Wait for the custom element to be defined before initializing
-    customElements.whenDefined('openai-chatkit').then(initChat);
+    // Try immediately on DOMContentLoaded, don't wait for custom element
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initChat);
+    } else {
+      initChat();
+    }
   </script>
 </body>
 </html>
