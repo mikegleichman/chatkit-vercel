@@ -3,52 +3,155 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chat</title>
+  <title>knownwell Chat</title>
   <script src="https://cdn.platform.openai.com/deployments/chatkit/chatkit.js" async></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+
     html, body {
       height: 100%;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #f5f5f5;
+      background: #f5f4e8;
+      overflow: hidden;
     }
-    body {
+
+    /* Organic background blobs */
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(0px);
+    }
+    .blob-green {
+      width: 55vw;
+      height: 55vw;
+      background: #d6e8b0;
+      top: -20vw;
+      left: -15vw;
+      border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+    }
+    .blob-pink {
+      width: 45vw;
+      height: 45vw;
+      background: #f5cfc4;
+      bottom: -10vw;
+      left: -10vw;
+      border-radius: 45% 55% 40% 60% / 55% 45% 60% 40%;
+    }
+    .blob-gray {
+      width: 40vw;
+      height: 40vw;
+      background: #dde0e8;
+      top: 5vw;
+      right: -12vw;
+      border-radius: 55% 45% 60% 40% / 40% 60% 45% 55%;
+    }
+
+    /* Page layout */
+    .page {
+      position: relative;
+      z-index: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
+      padding: 20px;
     }
-    .chat-container {
+
+    /* Logo */
+    .logo {
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+    }
+    .logo-text {
+      font-size: 26px;
+      font-weight: 700;
+      color: #1a1a1a;
+      letter-spacing: -0.5px;
+    }
+    .logo-text span {
+      color: #1a1a1a;
+    }
+    .logo-dot {
+      color: #6b7280;
+      font-weight: 400;
+    }
+
+    /* Subtitle */
+    .subtitle {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 20px;
+      letter-spacing: 0.01em;
+    }
+
+    /* Chat card */
+    .chat-card {
       width: 100%;
-      max-width: 800px;
-      height: 90vh;
+      max-width: 780px;
+      height: 75vh;
       background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      border-radius: 20px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.10);
       overflow: hidden;
       display: flex;
       flex-direction: column;
     }
+
     openai-chatkit {
       flex: 1;
       width: 100%;
       height: 100%;
     }
+
     @media (max-width: 840px) {
-      body { padding: 0; background: white; }
-      .chat-container {
-        height: 100vh;
-        border-radius: 0;
-        box-shadow: none;
-        max-width: 100%;
+      .page { padding: 0; justify-content: flex-start; }
+      .logo { margin-top: 24px; }
+      .chat-card {
+        height: calc(100vh - 110px);
+        border-radius: 16px;
+        margin: 0 12px;
+        width: calc(100% - 24px);
       }
     }
   </style>
 </head>
 <body>
-  <div class="chat-container">
-    <openai-chatkit id="chatkit" domain-key="domain_pk_69b1953264ec8194891802cae6ef741d0d8e65ed9eccf539"></openai-chatkit>
+  <!-- Background blobs -->
+  <div class="bg">
+    <div class="blob blob-green"></div>
+    <div class="blob blob-pink"></div>
+    <div class="blob blob-gray"></div>
+  </div>
+
+  <div class="page">
+    <!-- Logo -->
+    <div class="logo">
+      <!-- Knownwell checkmark-style icon -->
+      <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 20 C8 12, 20 4, 32 12 C36 15, 36 25, 28 30 C20 35, 8 30, 8 20Z" fill="#4a5568" opacity="0.15"/>
+        <path d="M12 20 L18 26 L28 14" stroke="#4a5568" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="logo-text">knownwell</span>
+    </div>
+
+    <p class="subtitle">Type <strong>"start"</strong> to get started</p>
+
+    <div class="chat-card">
+      <openai-chatkit id="chatkit" domain-key="domain_pk_69b1953264ec8194891802cae6ef741d0d8e65ed9eccf539"></openai-chatkit>
+    </div>
   </div>
 
   <script>
