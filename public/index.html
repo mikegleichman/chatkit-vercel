@@ -52,30 +52,32 @@
   </div>
 
   <script>
-    async function initChat() {
+    function initChat() {
       const el = document.getElementById('chatkit');
 
-      try {
-        const res = await fetch('/api/session', { method: 'POST' });
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          console.error('Session error:', res.status, err);
-          el.innerHTML = '<p style="padding:20px;color:red">Error starting session. Check the browser console and verify your environment variables in Vercel.</p>';
-          return;
+      el.setOptions({
+        api: {
+          async getClientSecret(currentSecret) {
+            try {
+              const res = await fetch('/api/session', { method: 'POST' });
+              if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                console.error('Session error:', res.status, err);
+                return null;
+              }
+              const { client_secret } = await res.json();
+              return client_secret;
+            } catch (err) {
+              console.error('Failed to fetch client secret:', err);
+              return null;
+            }
+          }
         }
-        const { client_secret } = await res.json();
-        el.setAttribute('client-secret', client_secret);
-      } catch (err) {
-        console.error('Failed to start chat session:', err);
-      }
+      });
     }
 
-    // Try immediately on DOMContentLoaded, don't wait for custom element
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initChat);
-    } else {
-      initChat();
-    }
+    // Wait for the custom element to be defined, then initialize
+    customElements.whenDefined('openai-chatkit').then(initChat);
   </script>
 </body>
 </html>
