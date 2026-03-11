@@ -1,0 +1,5 @@
+{
+  "name": "chatkit-vercel",
+  "version": "1.0.0",
+  "description": "OpenAI ChatKit deployment for Vercel"
+}

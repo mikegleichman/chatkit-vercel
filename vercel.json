@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/api/session", "destination": "/api/session.js" },
+    { "source": "/(.*)", "destination": "/public/index.html" }
+  ]
+}

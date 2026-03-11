@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat</title>
+  <script src="https://cdn.platform.openai.com/deployments/chatkit/chatkit.js" async></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f5f5;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .chat-container {
+      width: 100%;
+      max-width: 800px;
+      height: 90vh;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    openai-chatkit {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+    }
+    @media (max-width: 840px) {
+      body { padding: 0; background: white; }
+      .chat-container {
+        height: 100vh;
+        border-radius: 0;
+        box-shadow: none;
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <openai-chatkit id="chatkit"></openai-chatkit>
+  </div>
+
+  <script>
+    async function initChat() {
+      const el = document.getElementById('chatkit');
+
+      try {
+        const res = await fetch('/api/session', { method: 'POST' });
+        if (!res.ok) {
+          const err = await res.json();
+          console.error('Session error:', err);
+          return;
+        }
+        const { client_secret } = await res.json();
+        el.setAttribute('client-secret', client_secret);
+      } catch (err) {
+        console.error('Failed to start chat session:', err);
+      }
+    }
+
+    // Wait for the custom element to be defined before initializing
+    customElements.whenDefined('openai-chatkit').then(initChat);
+  </script>
+</body>
+</html>
